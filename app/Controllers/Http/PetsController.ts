@@ -1,7 +1,6 @@
-// import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-
 import {HttpContextContract} from "@ioc:Adonis/Core/HttpContext";
 import Pet from "App/Models/Pet";
+import {schema} from "@ioc:Adonis/Core/Validator";
 
 export default class PetsController {
 
@@ -32,8 +31,13 @@ export default class PetsController {
    * @param response
    */
   public async store({request, response}: HttpContextContract) {
-    const body = request.body();
-    const addPet = Pet.create(body);
+    const newPetSchema = schema.create({
+      name: schema.string({trim:true}),
+      type: schema.string({trim:true}),
+      age: schema.number()
+    })
+    const payload = await request.validate({schema:newPetSchema})
+    const addPet = Pet.create(payload);
     response.status(200);
     return addPet;
   }
@@ -67,13 +71,18 @@ export default class PetsController {
    * @param response
    */
   public async update({params, request, response}: HttpContextContract) {
-    const body = request.body();
-    const pet = await Pet.find(params.id)
+    const newPetSchema = schema.create({
+      name: schema.string({trim:true}),
+      type: schema.string({trim:true}),
+      age: schema.number()
+    })
+    const payload = await request.validate({schema:newPetSchema});
+    const pet = await Pet.find(params.id);
     if (pet) {
       response.status(200)
-      pet.type = body.type || pet.type;
-      pet.name = body.name || pet.name;
-      pet.age = body.age || pet.age;
+      pet.type = payload.type || pet.type;
+      pet.name = payload.name || pet.name;
+      pet.age = payload.age || pet.age;
       const createdObject = await pet.save();
       return {
         message: "object updated successfully",
@@ -86,7 +95,6 @@ export default class PetsController {
       };
     }
   }
-
 
   /**
    * @author Abdullah Hegab

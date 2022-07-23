@@ -10,7 +10,6 @@ export default class extends BaseSchema {
       table.string('name')
       table.integer('age')
 
-
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

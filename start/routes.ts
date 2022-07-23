@@ -18,7 +18,14 @@
 |
 */
 
-import Route from '@ioc:Adonis/Core/Route'
+import Route from '@ioc:Adonis/Core/Route';
 
-Route.resource('/pets', 'PetsController').apiOnly()
-// Route.resource('owners.pets', 'OwnersController').apiOnly()
+Route.group(()=>{
+  Route.post('/register','AuthController.register');
+  Route.post('/login','AuthController.login');
+})
+
+Route.group(()=>{
+  Route.resource('/pets', 'PetsController').apiOnly()
+}).middleware('auth')
+
