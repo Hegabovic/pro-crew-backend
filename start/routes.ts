@@ -23,9 +23,20 @@ import Route from '@ioc:Adonis/Core/Route';
 Route.group(()=>{
   Route.post('/register','AuthController.register');
   Route.post('/login','AuthController.login');
+  Route.post('/logout','AuthController.logout');
+  Route.post('/reset-password','AuthController.resetPassword');
+  Route.post('/confirm-password-change','AuthController.confirmPassword');
 })
 
+// async ({ ally }) => {
+//   return ally.use('github').redirect()
+// })
+// Route.group(()=> {
+//   Route.get('/github/redirect', 'ctx.ally')
+// })
+
 Route.group(()=>{
-  Route.resource('/pets', 'PetsController').apiOnly()
+  Route.resource('/pets', 'PetsController').apiOnly();
+  Route.resource('/users','AuthController').apiOnly();
 }).middleware('auth')
 

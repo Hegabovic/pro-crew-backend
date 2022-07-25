@@ -1,10 +1,15 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel } from '@ioc:Adonis/Lucid/Orm'
+import {column, beforeSave, BaseModel, belongsTo, BelongsTo} from '@ioc:Adonis/Lucid/Orm'
+import {GetProviderRealUser, OpaqueTokenContract} from "@ioc:Adonis/Addons/Auth";
+import Role from "App/Models/Role";
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: number
+
+  @column()
+  public name:string
 
   @column()
   public email: string
@@ -13,7 +18,7 @@ export default class User extends BaseModel {
   public password: string
 
   @column()
-  public rememberMeToken?: string
+  public rememberMeToken?: OpaqueTokenContract<GetProviderRealUser<"user">>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -27,4 +32,8 @@ export default class User extends BaseModel {
       user.password = await Hash.make(user.password)
     }
   }
+
+  @belongsTo(() => Role)
+  public role: BelongsTo<typeof Role>
+
 }
