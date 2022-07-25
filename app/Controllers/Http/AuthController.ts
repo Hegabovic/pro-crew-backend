@@ -2,6 +2,7 @@ import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import {schema, rules} from "@ioc:Adonis/Core/Validator";
 import User from "App/Models/User";
 import Mail from "@ioc:Adonis/Addons/Mail";
+import Role from "App/Models/Role";
 
 
 
@@ -47,8 +48,17 @@ export default class AuthController {
         .query()
         .where('email', email)
 
+
+      const role = await Role
+        .query()
+        .where('id',user[0].role_id)
+
+
       return {
         username: user[0].name,
+        role: role[0].name,
+
+
         token: token.toJSON().token
       }
     } catch {
