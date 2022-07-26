@@ -71,25 +71,8 @@ export default class AuthController {
     return {message:"logged out successfully"}
 
   }
-  /**
-   * @author Abdullah Hegab
-   * @description Get all Users
-   * @param response
-   */
-  public async index({response}: HttpContextContract) {
-    const users = await User.all();
-    if (users.length > 0) {
-      response.status(200)
-      return {
-        data: users
-      };
-    } else {
-      response.status(404);
-      return {
-        message: "data not found, try again later"
-      };
-    }
-  }
+
+
 
 
   /**

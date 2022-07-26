@@ -36,7 +36,6 @@ Route.group(()=>{
 // })
 
 Route.group(()=>{
-  Route.resource('/pets', 'PetsController').apiOnly();
-  Route.resource('/users','AuthController').apiOnly();
-}).middleware('auth')
+  Route.resource('/users', 'UsersController').apiOnly();
+}).middleware(['auth','isAdmin'])
 

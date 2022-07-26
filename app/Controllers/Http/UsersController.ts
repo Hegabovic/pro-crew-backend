@@ -1,8 +1,8 @@
 import {HttpContextContract} from "@ioc:Adonis/Core/HttpContext";
-import Pet from "App/Models/Pet";
 import {schema} from "@ioc:Adonis/Core/Validator";
+import User from "App/Models/User";
 
-export default class PetsController {
+export default class UsersController {
 
   /**
    * @author Abdullah Hegab
@@ -10,11 +10,11 @@ export default class PetsController {
    * @param response
    */
   public async index({response}: HttpContextContract) {
-    const pets = await Pet.all();
-    if (pets.length > 0) {
+    const users = await User.query().where('role_id',1)
+    if (users.length > 0) {
       response.status(200)
       return {
-        data: pets
+        data: users
       };
     } else {
       response.status(404);
@@ -31,15 +31,15 @@ export default class PetsController {
    * @param response
    */
   public async store({request, response}: HttpContextContract) {
-    const newPetSchema = schema.create({
+    const newUserSchema = schema.create({
       name: schema.string({trim:true}),
       type: schema.string({trim:true}),
       age: schema.number()
     })
-    const payload = await request.validate({schema:newPetSchema})
-    const addPet = Pet.create(payload);
+    const payload = await request.validate({schema:newUserSchema})
+    const addUser = User.create(payload);
     response.status(200);
-    return addPet;
+    return addUser;
   }
 
   /**
@@ -49,16 +49,16 @@ export default class PetsController {
    * @param response
    */
   public async show({params, response}: HttpContextContract) {
-    const db_pet = await Pet.find(params.id);
-    if (db_pet) {
+    const db_user = await User.find(params.id);
+    if (db_user) {
       response.status(200);
       return {
-        data: db_pet
+        data: db_user
       };
     } else {
       response.status(404);
       return {
-        message: "object not found"
+        message: "user not found"
       };
     }
   }
@@ -71,19 +71,18 @@ export default class PetsController {
    * @param response
    */
   public async update({params, request, response}: HttpContextContract) {
-    const newPetSchema = schema.create({
+    const newUserSchema = schema.create({
       name: schema.string({trim:true}),
-      type: schema.string({trim:true}),
-      age: schema.number()
+      email: schema.string({trim:true}),
     })
-    const payload = await request.validate({schema:newPetSchema});
-    const pet = await Pet.find(params.id);
-    if (pet) {
+    const payload = await request.validate({schema:newUserSchema});
+    const user = await User.find(params.id);
+    if (user) {
       response.status(200)
-      pet.type = payload.type || pet.type;
-      pet.name = payload.name || pet.name;
-      pet.age = payload.age || pet.age;
-      const createdObject = await pet.save();
+      user.name = payload.name || user.name;
+      user.email = payload.email || user.email;
+
+      const createdObject = await user.save();
       return {
         message: "object updated successfully",
         data: createdObject
@@ -103,10 +102,10 @@ export default class PetsController {
    * @param response
    */
   public async destroy({params, response}: HttpContextContract) {
-    const pet = await Pet.find(params.id);
-    if (pet) {
+    const user = await User.find(params.id);
+    if (user) {
       response.status(200);
-      await pet.delete();
+      await user.delete();
       return {
         message: "object has been deleted successfully",
       };
