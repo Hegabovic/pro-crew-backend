@@ -107,12 +107,12 @@ export default class UsersController {
       response.status(200);
       await user.delete();
       return {
-        message: "object has been deleted successfully",
+        success: "object has been deleted successfully",
       };
     } else {
       response.status(404);
       return {
-        message: "object not found"
+        failed: "object not found"
       }
     }
   }
