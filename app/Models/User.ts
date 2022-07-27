@@ -22,6 +22,15 @@ export default class User extends BaseModel {
   @column()
   public rememberMeToken?: OpaqueTokenContract<GetProviderRealUser<"user">>
 
+  @column()
+  public avatar_url: string;
+
+  @column()
+  public providerId: string;
+
+  @column()
+  public provider: string;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

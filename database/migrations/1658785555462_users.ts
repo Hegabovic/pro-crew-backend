@@ -16,6 +16,9 @@ export default class UsersSchema extends BaseSchema {
         .onDelete("CASCADE")
         .notNullable()
         .defaultTo(1)
+      table.string('avatar_url').nullable();
+      table.string('provider').nullable();
+      table.string('provider_id').nullable();
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL
        */
