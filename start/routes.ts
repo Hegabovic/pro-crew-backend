@@ -25,22 +25,22 @@ Route.get('/',()=>{
 });
 Route.group(()=>{
 
-  Route.post('register','AuthController.register');
-  Route.post('login','AuthController.login');
-  Route.post('logout','AuthController.logout');
-  Route.post('check-email','AuthController.checkAndSendMail')
-  Route.post('confirm-password-change','AuthController.confirmPassword').as('confirm-password-change');
+  Route.post('/register','AuthController.register');
+  Route.post('/login','AuthController.login');
+  Route.post('/logout','AuthController.logout');
+  Route.post('/check-email','AuthController.checkAndSendMail')
+  Route.post('/confirm-password-change','AuthController.confirmPassword').as('confirm-password-change');
 })
 
 Route.group(()=>{
   // SIGN IN ROUTES
-  Route.get('github-sign-in', 'AuthController.redirect')
+  Route.get('/github-sign-in', 'AuthController.redirect')
 //OAuth CALLBACK
-  Route.get('github-sign-in-callback', 'AuthController.handleCallback');
+  Route.get('/github-sign-in-callback', 'AuthController.handleCallback');
 })
 
 Route.group(()=>{
-  Route.resource('users', 'UsersController').apiOnly();
+  Route.resource('/users', 'UsersController').apiOnly();
 }).middleware(['auth','isAdmin'])
 
 
