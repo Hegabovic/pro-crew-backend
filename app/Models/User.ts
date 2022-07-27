@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import {column, beforeSave, BaseModel, belongsTo, BelongsTo} from '@ioc:Adonis/Lucid/Orm'
-import {GetProviderRealUser, OpaqueTokenContract} from "@ioc:Adonis/Addons/Auth";
+
 import Role from "App/Models/Role";
 
 export default class User extends BaseModel {
@@ -14,13 +14,13 @@ export default class User extends BaseModel {
   @column()
   public role_id:number
   @column()
-  public email: string
+  public email: string | undefined
 
   @column({ serializeAs: null })
-  public password: string
+  public password: string | ''
 
   @column()
-  public rememberMeToken?: OpaqueTokenContract<GetProviderRealUser<"user">>
+  public rememberMeToken:string |null | undefined
 
   @column()
   public avatar_url: string;
