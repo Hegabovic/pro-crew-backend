@@ -124,8 +124,6 @@ export default class AuthController {
 
 
 
-
-
   public async redirect({ally}: HttpContextContract) {
     return ally.use('github').redirect()
   }
