@@ -44,8 +44,9 @@ export default mailConfig({
     */
     smtp: {
       driver: 'smtp',
+      // baseUrl:'localhost:4200',
       host: Env.get('SMTP_HOST'),
-      port: Env.get('SMTP_PORT'),
+      port: Env.get('SMTP_PORT',2525),
 			auth: {
 				user: Env.get('SMTP_USERNAME'),
 				pass: Env.get('SMTP_PASSWORD'),

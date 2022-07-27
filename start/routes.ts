@@ -24,8 +24,13 @@ Route.group(()=>{
   Route.post('/register','AuthController.register');
   Route.post('/login','AuthController.login');
   Route.post('/logout','AuthController.logout');
-  Route.post('/reset-password','AuthController.resetPassword');
-  Route.post('/confirm-password-change','AuthController.confirmPassword');
+  Route.post('/check-email','AuthController.checkAndSendMail')
+  // Route.post('/reset-password','AuthController.resetPassword');
+  Route.post('/confirm-password-change','AuthController.confirmPassword').as('confirm-password-change');
+})
+
+Route.group(()=>{
+
 })
 
 // async ({ ally }) => {

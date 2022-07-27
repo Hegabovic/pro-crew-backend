@@ -1,9 +1,10 @@
 import type {HttpContextContract} from '@ioc:Adonis/Core/HttpContext'
 import {schema, rules} from "@ioc:Adonis/Core/Validator";
 import User from "App/Models/User";
-import Mail from "@ioc:Adonis/Addons/Mail";
 import Role from "App/Models/Role";
-
+import Mail from "@ioc:Adonis/Addons/Mail";
+import Route from "@ioc:Adonis/Core/Route";
+import Hash from "@ioc:Adonis/Core/Hash";
 
 
 export default class AuthController {
@@ -44,14 +45,14 @@ export default class AuthController {
         .where('email', email)
         .update({remember_me_token: token.toJSON().token})
 
-      const user =  await User
+      const user = await User
         .query()
         .where('email', email)
 
 
       const role = await Role
         .query()
-        .where('id',user[0].role_id)
+        .where('id', user[0].role_id)
 
 
       return {
@@ -66,13 +67,11 @@ export default class AuthController {
     }
   }
 
-  public async logout({auth}:HttpContextContract){
-     await auth.logout()
-    return {message:"logged out successfully"}
+  public async logout({auth}: HttpContextContract) {
+    await auth.logout()
+    return {message: "logged out successfully"}
 
   }
-
-
 
 
   /**
@@ -80,19 +79,27 @@ export default class AuthController {
    * @description sending email with a link to reset password
    * @param request
    */
-  public async resetPassword({request}: HttpContextContract) {
+  public async checkAndSendMail({request}: HttpContextContract) {
     const email = request.input('email');
     const isUserExist = await User.query().where('email', email)
-    // return isUserExist.length > 0;
     if (isUserExist.length > 0) { // true
-      await Mail.send((message) => {
+      const customUrl = "http://localhost:4200" + Route.makeSignedUrl('confirm-password-change')
+
+      await Mail.use('smtp').send((message) => {
         message
-          .to(email)
-        // .from('admin@admin.com')
-        // .subject('Verify your password')
-        // .htmlView('emails/reset_password')
+          .from('admin@admin.com')
+          .to('abdallahhegab192@gmail.com')
+          .subject('Verify your password')
+          .htmlView('emails/resetPassword',
+            {
+              data: isUserExist[0],
+              url: customUrl
+            })
       });
-      return "mail sent"
+      return {
+        message: "mail sent",
+        status:true
+      }
     } else {
       return {message: "email doesn't exist"}
     }
@@ -104,15 +111,15 @@ export default class AuthController {
    * @param request
    * @param params
    */
-  public async confirmPassword({request }:HttpContextContract){
-    const newPassword:string = request.input('password');
-    // 7geb el email mn el url
-    const email = "haha@gmail.com"
+  public async confirmPassword({request}: HttpContextContract) {
+    const email = request.input('email')
+    const newPassword: string = request.input('password');
+    const HashedNewPassword = await Hash.make(newPassword)
     await User
       .query()
       .where('email', email)
-      .update({password:newPassword})
-    return {message : "password has been modified"}
+      .update({password: HashedNewPassword})
+    return {message: "password has been modified"}
   }
 }
 
