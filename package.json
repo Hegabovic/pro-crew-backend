@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node ace serve --watch",
     "build": "node ace build --production",
-    "start": "node build/server.js"
+    "start": "serve -s build"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^5.8.0",
